@@ -147,3 +147,38 @@ class ChangePasswordView(APIView):
             {'message': 'رمز عبور با موفقیت تغییر کرد'},
             status=status.HTTP_200_OK
         )
+
+
+# ============================================
+# 6. ViewSet مدیریت کاربران (فقط ادمین)
+# ============================================
+from rest_framework import viewsets, filters as drf_filters
+from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Count
+from .serializers import UserAdminListSerializer, UserAdminCreateUpdateSerializer
+
+
+class UserAdminViewSet(viewsets.ModelViewSet):
+    """
+    مدیریت کامل کاربران (فقط ادمین)
+    GET    /api/v1/auth/admin/users/
+    POST   /api/v1/auth/admin/users/
+    GET    /api/v1/auth/admin/users/{id}/
+    PUT    /api/v1/auth/admin/users/{id}/
+    PATCH  /api/v1/auth/admin/users/{id}/
+    DELETE /api/v1/auth/admin/users/{id}/
+    """
+    permission_classes = [permissions.IsAdminUser]
+    filter_backends = [DjangoFilterBackend, drf_filters.SearchFilter, drf_filters.OrderingFilter]
+    search_fields = ['username', 'email', 'first_name', 'last_name', 'phone']
+    ordering_fields = ['date_joined', 'email', 'username']
+    ordering = ['-date_joined']
+    filterset_fields = ['is_active', 'is_staff', 'is_verified']
+
+    def get_queryset(self):
+        return User.objects.annotate(orders_count=Count('orders'))
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return UserAdminListSerializer
+        return UserAdminCreateUpdateSerializer

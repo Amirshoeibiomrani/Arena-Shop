@@ -160,3 +160,56 @@ Serializer یعنی «تبدیل‌کننده». کارش اینه که:
 داده‌های JSON ورودی رو به Python تبدیل و اعتبارسنجی کنه
 می‌تونی فکر کنی Serializer مثل فرم Django ولی برای API.
     """
+
+# ============================================
+# 5. Serializer لیست کاربران (برای ادمین)
+# ============================================
+class UserAdminListSerializer(serializers.ModelSerializer):
+    """نمایش کاربر برای پنل ادمین"""
+    full_name = serializers.CharField(read_only=True)
+    orders_count = serializers.IntegerField(read_only=True, default=0)
+
+    class Meta:
+        model = User
+        fields = (
+            'id', 'username', 'email', 'first_name', 'last_name',
+            'full_name', 'phone', 'avatar', 'is_active', 'is_staff',
+            'is_verified', 'orders_count', 'date_joined',
+        )
+
+
+# ============================================
+# 6. Serializer ساخت/ویرایش کاربر (برای ادمین)
+# ============================================
+class UserAdminCreateUpdateSerializer(serializers.ModelSerializer):
+    """ساخت و ویرایش کاربر توسط ادمین"""
+    password = serializers.CharField(
+        write_only=True, required=False, allow_blank=True, min_length=6
+    )
+
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'first_name', 'last_name',
+            'phone', 'password', 'is_active', 'is_staff', 'is_verified',
+        )
+        extra_kwargs = {
+            'username': {'required': True},
+            'email': {'required': True},
+        }
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        if not password:
+            raise serializers.ValidationError({"password": "رمز عبور الزامی است."})
+        user = User.objects.create_user(password=password, **validated_data)
+        return user
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance

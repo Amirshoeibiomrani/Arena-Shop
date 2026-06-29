@@ -1,0 +1,134 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# ============================================
+# Backup Files - Added for Next.js Project
+# ============================================
+
+# All backup files
+*.backup
+*.bak
+*.old
+*.orig
+*.tmp
+*.save
+*.save~
+*.sw?
+*.un~
+.#*
+\#*#
+*~
+
+# Backup directories
+backups/
+*.backup.zip
+*.backup.tar.gz
+*.backup.gz
+
+# Config backups
+next.config.js.backup
+next.config.mjs.backup
+tsconfig.json.backup
+jsconfig.json.backup
+tailwind.config.js.backup
+postcss.config.js.backup
+next-env.d.ts.backup
+
+# Package manager backups
+package-lock.json.backup
+yarn.lock.backup
+pnpm-lock.yaml.backup
+bun.lockb.backup
+
+# Environment backups
+.env.backup
+.env.local.backup
+.env.development.local.backup
+.env.test.local.backup
+.env.production.local.backup
+.env.*.backup
+*.env.backup
+
+# Build and cache backups
+.next.backup/
+out.backup/
+dist.backup/
+build.backup/
+.cache.backup/
+cache.backup/
+
+# IDE backups
+.idea/backups/
+.vscode/backups/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+Thumbs.db
+
+# Database backups (if using any database)
+*.sql
+*.sql.gz
+*.sql.backup
+*.dump
+*.dump.backup
+*.db
+*.db-shm
+*.db-wal
+*.db.backup
+prisma/*.db
+prisma/*.sql
+prisma/*.dump
+prisma/backups/
+prisma/dev.db.backup
+prisma/schema.prisma.backup
+
+# TypeScript backups
+*.tsbuildinfo.backup
+*.d.ts.backup
+*.d.ts.map.backup
+
+# Logs backups
+*.log.backup
+*.log.*.backup
